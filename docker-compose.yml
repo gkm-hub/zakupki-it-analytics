@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: zakupki_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-zakupki}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zakupki_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-zakupki}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data:
